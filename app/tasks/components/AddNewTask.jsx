@@ -49,7 +49,7 @@ const AddNewTask = ({
         formik.setFieldValue("clientName", "");
         formik.setFieldValue("assigneeName", "");
         formik.setFieldValue("description", "");
-        formik.setFieldValue("status", "");
+        // formik.setFieldValue("status", "");
       }
     },
   });

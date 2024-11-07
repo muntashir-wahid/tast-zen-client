@@ -50,7 +50,7 @@ const TaskStatus = ({ status: { name: statusName, value: statusValue } }) => {
 
         <div className="flex flex-col gap-3 h-full">
           {tasks.map((task) => (
-            <TaskCard key={task.uid} task={task} />
+            <TaskCard key={task.uid} task={task} refetchTask={refetch} />
           ))}
         </div>
       </div>
