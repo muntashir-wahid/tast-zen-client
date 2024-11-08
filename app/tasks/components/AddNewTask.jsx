@@ -40,16 +40,17 @@ const AddNewTask = ({
     onSubmit: async (values) => {
       try {
         await APIKit.tasks.addTask(values);
-        setOpenAddTaskModal(false);
         refetchTask();
         toast.success("New task created successfully!");
       } catch (err) {
         console.log(err);
+        toast.error("Something went wrong!");
       } finally {
         formik.setFieldValue("clientName", "");
         formik.setFieldValue("assigneeName", "");
         formik.setFieldValue("description", "");
-        // formik.setFieldValue("status", "");
+        formik.setTouched("description", false);
+        setOpenAddTaskModal(false);
       }
     },
   });
@@ -72,7 +73,7 @@ const AddNewTask = ({
                 onChange={formik.handleChange}
                 value={formik.values.clientName}
               />
-              {formik.touched.clientName ? (
+              {formik.touched.clientName && formik.errors.clientName ? (
                 <p className="text-sm font-medium text-red-600">
                   {formik.errors.clientName}
                 </p>
@@ -83,11 +84,12 @@ const AddNewTask = ({
               <Input
                 type="text"
                 id="assigneeName"
+                name="assigneeName"
                 placeholder="Salman Khan"
                 onChange={formik.handleChange}
                 value={formik.values.assigneeName}
               />
-              {formik.touched.assigneeName ? (
+              {formik.touched.assigneeName && formik.errors.assigneeName ? (
                 <p className="text-sm font-medium text-red-600">
                   {formik.errors.assigneeName}
                 </p>
@@ -104,7 +106,7 @@ const AddNewTask = ({
                 onChange={formik.handleChange}
                 value={formik.values.description}
               />
-              {formik.touched.description ? (
+              {formik.touched.description && formik.errors.description ? (
                 <p className="text-sm font-medium text-red-600">
                   {formik.errors.description}
                 </p>

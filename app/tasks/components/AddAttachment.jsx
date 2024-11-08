@@ -32,27 +32,30 @@ const AddAttachment = ({
   });
 
   const handleAttachmentUpload = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
+    const formData = new FormData();
+    formData.append("file", file);
 
-      const data = await APIKit.tasks.addTaskAttachment(taskUid, formData);
-      toast.success("New Attachment added successfully!");
+    const promise = APIKit.tasks
+      .addTaskAttachment(taskUid, formData)
+      .then((data) => {
+        console.log(data);
 
-      refetchTask();
-      refetchAttachment();
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setFile(null);
-    }
+        refetchTask();
+        refetchAttachment();
+      })
+      .catch((err) => {
+        throw err;
+      })
+      .finally(() => {
+        setFile(null);
+      });
+
+    return toast.promise(promise, {
+      loading: "Uploading Attachment...",
+      success: "New Attachment added successfully!",
+      error: "Something went wrong!",
+    });
   };
-
-  if (isLoading) {
-    return <div>Loading Tasks...</div>;
-  }
-
-  const { attachments } = data.data;
 
   return (
     <Dialog
@@ -91,18 +94,24 @@ const AddAttachment = ({
             All Attachments
           </h6>
           <ul className="list-disc list-inside">
-            {attachments?.map((attachment) => (
-              <li key={attachment.uid}>
-                <Link
-                  className="text-blue-400 underline"
-                  download={true}
-                  target="_blank"
-                  href={attachment.fileUrl}
-                >
-                  {attachment.fileName}
-                </Link>
-              </li>
-            ))}
+            {isLoading ? (
+              "Loading Attachments..."
+            ) : (
+              <>
+                {data?.data.attachments?.map((attachment) => (
+                  <li key={attachment.uid}>
+                    <Link
+                      className="text-blue-400 underline"
+                      download={true}
+                      target="_blank"
+                      href={attachment.fileUrl}
+                    >
+                      {attachment.fileName}
+                    </Link>
+                  </li>
+                ))}
+              </>
+            )}
           </ul>
         </div>
 

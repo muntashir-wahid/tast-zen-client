@@ -20,7 +20,11 @@ const TaskStatus = ({ status: { name: statusName, value: statusValue } }) => {
   });
 
   if (isLoading) {
-    return <div>Loading {statusName} Tasks...</div>;
+    return (
+      <div className="flex-shrink-0 bg-[#F2F4F7] w-[400px] px-3 pt-4 h-[90vh] overflow-y-auto overflow-x-hidden custom-scrollbar">
+        Loading {statusName} Tasks...
+      </div>
+    );
   }
 
   const {
